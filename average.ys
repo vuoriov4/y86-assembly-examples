@@ -1,0 +1,46 @@
+# finds the average of numbers in the stack
+# stores the result in %rax
+
+.pos 0
+init:
+		irmovq stack, %rbp #start
+		irmovq stack, %rsp #current
+		irmovq $4, %rax
+		pushq %rax
+		pushq %rax
+		pushq %rax
+		pushq %rax
+		irmovq $0, %rax
+main:
+		irmovq $8, 	 %rcx		# const word length
+		irmovq $0, 	 %rdx 	# stack address
+		irmovq $0, 	 %rbx		# stack variable
+		irmovq $0, 	 %r10		# sum
+		rrmovq %rbp, %r11 	# length (constant)
+		irmovq $0, 	 %r14		# integer length
+		irmovq $1, 	 %rsi		# constant 1
+		subq %rsp,	 %r11
+		addq %r11, 	 %r13		# length (variable)
+		call sum
+		subq %rsi, %r14
+		# divide
+		call divide
+		halt
+sum:
+	popq %rdx 						# pop address
+	popq %rbx
+	pushq %rdx						# push address
+	addq %rbx, %r10
+	addq %rsi, %r14
+	subq %rcx, %r13
+	jge sum
+	ret
+.pos 0x100
+divide:
+    addq %rsi, %rax # rcx = 8, rax = result
+    subq %r14, %r10 # r14 = divider, r10 = dividend
+    jge divide
+    subq %rsi, %rax
+    ret
+.pos 0x400
+stack:

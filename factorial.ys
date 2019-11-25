@@ -1,0 +1,30 @@
+.pos 0
+init:
+    irmovq $0x5,  %r8 	 # arg
+		irmovq stack, %rsp
+		irmovq stack, %rbp
+main:
+		irmovq $1, 	 %rcx	 # constant 1
+		rrmovq %r8,  %rbx	 # counter (fact)
+		subq 	 %rcx, %rbx
+		rrmovq %r8,  %rdx	 # counter (mult)
+    call factorial
+    halt
+.pos 0x100
+factorial:
+		irmovq $0,   %rax	 # tulos
+		rrmovq %rbx, %r10
+		call mult
+		rrmovq %rax, %rdx
+		subq 	 %rcx, %rbx
+		jg factorial
+    ret
+.pos 0x200
+mult:
+    addq %rdx,%rax
+    subq %rcx,%r10
+    jge mult
+    subq %rdx,%rax
+    ret
+.pos 0x400
+stack:

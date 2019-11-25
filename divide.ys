@@ -1,0 +1,19 @@
+init:
+    irmovq $3, %rsi   # divisor -> result
+    irmovq $6, %rdi   # dividend
+main:
+    irmovq stack,%rsp
+    irmovq stack,%rbp
+    irmovq $0x1,%rcx
+    rrmovq %rdi,%rdx
+    call divide
+    halt
+.pos 0x100
+divide:
+    addq %rcx,%rax
+    subq %rsi,%rdx
+    jge divide
+    subq %rcx,%rax
+    ret
+.pos 0x400
+stack:

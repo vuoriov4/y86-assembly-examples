@@ -1,0 +1,49 @@
+# finds the minima and maxima of numbers in the stack.
+# stores minima in %rsi, maxima in %rdi.
+
+.pos 0
+init:
+		irmovq stack, %rbp #alku
+		irmovq stack, %rsp #nyk
+		irmovq $4, %rax
+		pushq %rax
+		irmovq $5, %rax
+		pushq %rax
+		irmovq $9, %rax
+		pushq %rax
+		irmovq $3, %rax
+		pushq %rax
+		irmovq $0, %rax
+main:
+		irmovq $8, 	 %rcx		# const word length
+		irmovq $0, 	 %rdx 	# stack address
+		irmovq $0, 	 %r9		# stack variable
+		rrmovq %rbp, %r8 		# length (constant)
+		subq %rsp,	 %r8
+		addq %r8, 	 %r13		# length (variable)
+		irmovq $0,	 %r10		# min cmp
+		irmovq $0,	 %r11		# max cmp
+		popq %r9
+		addq %r9, 	 %r10
+		addq %r9, 	 %r11
+		addq %r9, 	 %rsi
+		addq %r9, 	 %rdi
+		subq %rcx,	 %r13
+		call minmax
+		halt
+.pos 0x100
+minmax:
+		popq 		%rdx 						# pop address
+		popq 		%r9
+		pushq 	%rdx						# push address
+		subq 		%r9, %r10
+		cmovge 	%r9, %rsi
+		subq 		%r9, %r11
+		cmovle 	%r9, %rdi
+		rrmovq 	%rsi, %r10		# min cmp
+		rrmovq 	%rdi, %r11		# max cmp
+		subq 		%rcx,%r13
+		jg minmax
+		ret
+.pos 0x400
+stack:
