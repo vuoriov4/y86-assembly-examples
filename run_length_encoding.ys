@@ -4,40 +4,40 @@
 main:
 	irmovq stack, 		%rsp	# stack start
 	irmovq stack, 		%rbp	# stack end
-	irmovq $0xa,			%r10	# array length
-	irmovq $0x8,			%r14	# word length
-	irmovq $0x1, 			%rax	#	loop counter
-	irmovq $0x0,			%rbx	#	current word
+	irmovq $0xa,		%r10	# array length
+	irmovq $0x8,		%r14	# word length
+	irmovq $0x1, 		%rax	# loop counter
+	irmovq $0x0,		%rbx	# current word
 	irmovq $0x1200,		%rcx	# i
-	irmovq $0x1,			%rdx	# j
-	irmovq $0x0,			%r11	# previous word
-	irmovq $0x1,			%r8		# constant 1
-	irmovq $0x0, 			%r13	# dummy var
-	irmovq $0x0,			%r12	# stack counter
-	irmovq $0x0,			%rdi
-	irmovq $0x0,			%r9
+	irmovq $0x1,		%rdx	# j
+	irmovq $0x0,		%r11	# previous word
+	irmovq $0x1,		%r8		# constant 1
+	irmovq $0x0, 		%r13	# dummy var
+	irmovq $0x0,		%r12	# stack counter
+	irmovq $0x0,		%rdi
+	irmovq $0x0,		%r9
 	mrmovq (%rcx), 		%rbx
-	addq 	 %r14, 			%rcx
+	addq 	 %r14, 		%rcx
 	call loop
 	halt
 
 .pos 0x400
 loop:
-	rrmovq %rbx, %r11							# Previous
-	mrmovq (%rcx), %rbx						# Current
-	irmovq $0x0, %r13							# Eq. check
-	addq %r11, %r13								# Eq. check
-	subq %rbx, %r13								# Eq. check
-	je increment									# Increment j
-	jne save											# Save to stack
+	rrmovq %rbx, %r11			# Previous
+	mrmovq (%rcx), %rbx			# Current
+	irmovq $0x0, %r13			# Eq. check
+	addq %r11, %r13				# Eq. check
+	subq %rbx, %r13				# Eq. check
+	je increment				# Increment j
+	jne save					# Save to stack
 
 loop2:
-	addq %r14, %rcx								# Increment i
-	addq %r8,  %rax								# Increment i
-	irmovq $0x0, %r13							# End check
-	addq %r10, %r13								# End check
-	addq %r8,  %r13								# End check
-	subq %rax, %r13								# End check
+	addq %r14, %rcx				# Increment i
+	addq %r8,  %rax				# Increment i
+	irmovq $0x0, %r13			# End check
+	addq %r10, %r13				# End check
+	addq %r8,  %r13				# End check
+	subq %rax, %r13				# End check
 	jne loop
 	ret
 
